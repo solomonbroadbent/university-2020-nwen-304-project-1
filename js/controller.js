@@ -5,6 +5,7 @@ function init() {
 	loadId();
 	showTotal();
 	bindEvents();
+	setUpdateRecordEnabled(false);
 }
 
 function clearAll() {
@@ -70,12 +71,24 @@ const setAddRecordEnabled = shouldEnable => {
 	addRecordButton.toggleAttribute('disabled', !shouldEnable);
 };
 
+const setDeleteRecordEnabled = shouldEnable => {
+	const deleteRecordsButton = document.getElementById('remove');
+	deleteRecordsButton.toggleAttribute('disabled', !shouldEnable);
+};
+
+const setUpdateRecordEnabled = shouldEnable => {
+	const updateRecordButton = document.getElementById('update');
+	updateRecordButton.toggleAttribute('disabled', !shouldEnable);
+};
+
 function edit() {
 	/*this function fills (calls fillFields()) the form with the values of the item to edit after searching it in items */
 	const itemId = this.getAttribute('data-itemid');
 	const item = itemOperations.search(itemId);
 	fillFields(item);
 	setAddRecordEnabled(false);
+	setDeleteRecordEnabled(false);
+	setUpdateRecordEnabled(true);
 }
 
 function fillFields(itemObject) {
@@ -110,10 +123,13 @@ function updateRecord() {
 	item.desc = document.getElementById('desc').value;
 	item.color = document.getElementById('color').value;
 	item.url = document.getElementById('url').value;
-	// clear the form fields and update the records
+	// clear the form fields
 	clearAll();
 	loadId();
+	// update interface
 	setAddRecordEnabled(true);
+	setDeleteRecordEnabled(true);
+	setUpdateRecordEnabled(false);
 	printTable(itemOperations.items);
 }
 
@@ -130,7 +146,10 @@ function trash() {
 function printTable(items) {
 	/* this function calls printRecord for each item of items and then calls the showTotal function*/
 	document.getElementById('items').innerHTML = '';
-	items.forEach(item => printRecord(item));
+	items.forEach(item => {
+		itemOperations.markUnMark(item);
+		printRecord(item);
+	});
 	showTotal();
 }
 

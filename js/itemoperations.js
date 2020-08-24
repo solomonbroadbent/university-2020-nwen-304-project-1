@@ -15,11 +15,12 @@ const itemOperations = {
 	},
 	markUnMark(id) {
 		/* toggle the isMarked field of the item with the given argument id*/
-
+		let item = this.search(id);
+		if (item !== undefined) item.toggle();
 	},
 	countTotalMarked() {
 		/* counts the total number of marked items */
-
+		return this.items.filter(item => item.isMarked).count();
 	},
 
 }
