@@ -43,6 +43,8 @@ function bindEvents() {
 
 function deleteRecords() {
 	/* this function deletes the selected record from itemOperations and prints the table using the function printTable*/
+	itemOperations.remove();
+	printTable(itemOperations.items);
 }
 
 function addRecord() {
@@ -65,7 +67,6 @@ function addRecord() {
 
 function edit() {
 	/*this function fills (calls fillFields()) the form with the values of the item to edit after searching it in items */
-
 
 }
 
@@ -102,6 +103,9 @@ function trash() {
 
 function printTable(items) {
 	/* this function calls printRecord for each item of items and then calls the showTotal function*/
+	document.getElementById('items').innerHTML = '';
+	items.forEach(item => printRecord(item));
+	showTotal();
 }
 
 function printRecord(item) {

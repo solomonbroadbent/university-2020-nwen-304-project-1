@@ -7,6 +7,7 @@ const itemOperations = {
 	},
 	remove() {
 		/* removes the item which has the "isMarked" field set to true*/
+		this.items = this.items.filter(item => !item.isMarked);
 	},
 	search(id) {
 		/* searches the item with a given argument id */
