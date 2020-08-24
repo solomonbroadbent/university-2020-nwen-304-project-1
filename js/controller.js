@@ -1,7 +1,6 @@
 window.addEventListener("load", init);
 
 function init() {
-
 	clearAll();
 	loadId();
 	showTotal();
@@ -9,9 +8,12 @@ function init() {
 }
 
 function clearAll() {
-
 	/* this function clears the contents of the form except the ID (since ID is auto generated)*/
+	['name', 'price', 'desc', 'url']
+		.map(inputId => document.getElementById(inputId))
+		.forEach(input => input.value = '');
 
+	document.getElementById('color').value = '#000000';
 }
 
 let auto = autoGen();
@@ -43,7 +45,7 @@ function deleteRecords() {
 
 function addRecord() {
 	/* this function adds a new record in itemOperations and then calls printRecord(). showTotal(), loadId() and clearAll()*/
-
+	clearAll();
 }
 
 function edit() {
