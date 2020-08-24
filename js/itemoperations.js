@@ -20,7 +20,6 @@ const itemOperations = {
 	},
 	countTotalMarked() {
 		/* counts the total number of marked items */
-		return this.items.filter(item => item.isMarked).count();
+		return this.items.filter(item => item.isMarked).length;
 	},
-
 }

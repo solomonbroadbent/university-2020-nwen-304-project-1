@@ -27,13 +27,11 @@ function loadId() {
 
 function showTotal() {
 	/* this function populates the values of #total, #mark and #unmark ids of the form */
-	document.getElementById('total').innerText = itemOperations.items.length.toString();
-	document.getElementById('mark').innerText = itemOperations.items
-		.filter(item => item.isMarked)
-		.length.toString();
-	document.getElementById('unmark').innerText = itemOperations.items
-		.filter(item => !item.isMarked)
-		.length.toString();
+	const totalItems = itemOperations.items.length;
+	const totalItemsMarked = itemOperations.countTotalMarked();
+	document.getElementById('total').innerText = totalItems.toString();
+	document.getElementById('mark').innerText = totalItemsMarked.toString();
+	document.getElementById('unmark').innerText = (totalItems - totalItemsMarked).toString();
 }
 
 function bindEvents() {
