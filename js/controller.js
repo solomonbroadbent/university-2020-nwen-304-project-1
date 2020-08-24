@@ -1,21 +1,34 @@
 window.addEventListener("load", init);
 
+let itemFormFields = null;
+
 function init() {
+	itemFormFields = {
+		id: document.getElementById('id'),
+		name: document.getElementById('name'),
+		price: document.getElementById('price'),
+		description: document.getElementById('desc'),
+		color: document.getElementById('color'),
+		url: document.getElementById('url'),
+	};
+
 	clearAll();
 	loadId();
 	showTotal();
 	bindEvents();
 	setUpdateRecordEnabled(false);
+
 }
 
 function clearAll() {
 	/* this function clears the contents of the form except the ID (since ID is auto generated)*/
-	['name', 'price', 'desc', 'url']
-		.map(inputId => document.getElementById(inputId))
+	['name', 'price', 'description', 'url']
+		.map(inputId => itemFormFields[inputId])
 		.forEach(input => input.value = '');
 
-	document.getElementById('color').value = '#000000';
+	itemFormFields.color.value = '#000000';
 	document.getElementById('exrate').innerText = '';
+	itemOperations.items.forEach(item => item.isMarked = false);
 }
 
 let auto = autoGen();
@@ -39,7 +52,7 @@ function bindEvents() {
 	document.querySelector('#add').addEventListener('click', addRecord);
 	document.querySelector('#update').addEventListener('click', updateRecord);
 	document.querySelector('#exchange').addEventListener('change', getExchangerate);
-	document.getElementById('price').addEventListener('change', getExchangerate);
+	itemFormFields.price.addEventListener('change', getExchangerate);
 }
 
 function deleteRecords() {
@@ -51,12 +64,12 @@ function deleteRecords() {
 function addRecord() {
 	/* this function adds a new record in itemOperations and then calls printRecord(). showTotal(), loadId() and clearAll()*/
 	const item = new Item(
-		document.getElementById('id').innerText,
-		document.getElementById('name').value,
-		document.getElementById('price').value,
-		document.getElementById('desc').value,
-		document.getElementById('color').value,
-		document.getElementById('url').value,
+		itemFormFields.id.innerText,
+		itemFormFields.name.value,
+		itemFormFields.price.value,
+		itemFormFields.description.value,
+		itemFormFields.color.value,
+		itemFormFields.url.value,
 		false
 	);
 	itemOperations.add(item);
@@ -93,12 +106,13 @@ function edit() {
 
 function fillFields(itemObject) {
 	/*this function fills the form with the details of itemObject*/
-	document.getElementById('id').innerText = itemObject.id;
-	document.getElementById('name').value = itemObject.name;
-	document.getElementById('price').value = itemObject.price;
-	document.getElementById('desc').value = itemObject.desc;
-	document.getElementById('color').value = itemObject.color;
-	document.getElementById('url').value = itemObject.url;
+	itemFormFields.id.innerText = itemObject.id;
+	itemFormFields.name.value = itemObject.name;
+	itemFormFields.price.value = itemObject.price;
+	itemFormFields.description.value = itemObject.desc;
+	itemFormFields.color.value = itemObject.color;
+	itemFormFields.url.value = itemObject.url;
+	getExchangerate();
 }
 
 function createIcon(className, fn, id) {
@@ -115,14 +129,14 @@ function createIcon(className, fn, id) {
 
 function updateRecord() {
 	/*this function updates the record that is edited and then prints the table using printTable()*/
-	const itemId = document.getElementById('id').innerText;
-	const item = itemOperations.search(itemId);
+	const item = itemOperations.search(itemFormFields.id.innerText);
 	// update the items fields
-	item.name = document.getElementById('name').value;
-	item.price = document.getElementById('price').value;
-	item.desc = document.getElementById('desc').value;
-	item.color = document.getElementById('color').value;
-	item.url = document.getElementById('url').value;
+	item.name = itemFormFields.name.value;
+	item.price = itemFormFields.price.value;
+	item.desc = itemFormFields.description.value;
+	item.color = itemFormFields.color.value;
+	item.url = itemFormFields.url.value;
+	getExchangerate();
 	// clear the form fields
 	clearAll();
 	loadId();
@@ -178,7 +192,7 @@ function getExchangerate() {
 			const exchangeSelector = document.getElementById('exchange');
 			const selectedCurrencyCode = exchangeSelector.options[exchangeSelector.selectedIndex].value;
 			const exchangeRate = response.quotes[`USD${selectedCurrencyCode}`];
-			const priceInUSD = document.getElementById('price').value;
+			const priceInUSD = itemFormFields.price.value;
 			const priceInSelectedCurrency = (exchangeRate * priceInUSD).toFixed(2);
 			const currencySymbol = selectedCurrencyCode === 'EUR' || selectedCurrencyCode === 'GBP' ? '€' : '$';
 			document.getElementById('exrate').innerText = `${currencySymbol}${priceInSelectedCurrency} ${selectedCurrencyCode}`;
