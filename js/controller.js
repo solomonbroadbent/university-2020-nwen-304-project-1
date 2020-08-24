@@ -15,6 +15,7 @@ function clearAll() {
 		.forEach(input => input.value = '');
 
 	document.getElementById('color').value = '#000000';
+	document.getElementById('exrate').innerText = '';
 }
 
 let auto = autoGen();
@@ -40,6 +41,7 @@ function bindEvents() {
 	document.querySelector('#add').addEventListener('click', addRecord);
 	document.querySelector('#update').addEventListener('click', updateRecord);
 	document.querySelector('#exchange').addEventListener('change', getExchangerate);
+	document.getElementById('price').addEventListener('change', getExchangerate);
 }
 
 function deleteRecords() {
@@ -172,5 +174,15 @@ function printRecord(item) {
 
 function getExchangerate() {
 	/* this function makes an AJAX call to http://apilayer.net/api/live to fetch and display the exchange rate for the currency selected*/
-
+	fetch('http://api.currencylayer.com/live?access_key=8194f0d76cf76918ac03194e5ecb1740&source=USD')
+		.then(response => response.json())
+		.then(response => {
+			const exchangeSelector = document.getElementById('exchange');
+			const selectedCurrencyCode = exchangeSelector.options[exchangeSelector.selectedIndex].value;
+			const exchangeRate = response.quotes[`USD${selectedCurrencyCode}`];
+			const priceInUSD = document.getElementById('price').value;
+			const priceInSelectedCurrency = (exchangeRate * priceInUSD).toFixed(2);
+			const currencySymbol = selectedCurrencyCode === 'EUR' || selectedCurrencyCode === 'GBP' ? '€' : '$';
+			document.getElementById('exrate').innerText = `${currencySymbol}${priceInSelectedCurrency} ${selectedCurrencyCode}`;
+		});
 }
