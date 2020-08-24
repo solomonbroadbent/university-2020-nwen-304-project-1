@@ -2,6 +2,8 @@ const itemOperations = {
 	items: [],
 	add(itemObject) {
 		/* adds an item into the array items*/
+		// TODO: check itemObject is formed correctly
+		this.items.push(itemObject);
 	},
 	remove() {
 		/* removes the item which has the "isMarked" field set to true*/

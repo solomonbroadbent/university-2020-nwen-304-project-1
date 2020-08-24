@@ -21,31 +21,46 @@ let auto = autoGen();
 function loadId() {
 	/* this function automatically sets the value of ID */
 	document.querySelector('#id').innerText = auto.next().value;
-
-
 }
 
 function showTotal() {
 	/* this function populates the values of #total, #mark and #unmark ids of the form */
-
+	document.getElementById('total').innerText = itemOperations.items.length.toString();
+	document.getElementById('mark').innerText = itemOperations.items
+		.filter(item => item.isMarked)
+		.length.toString();
+	document.getElementById('unmark').innerText = itemOperations.items
+		.filter(item => !item.isMarked)
+		.length.toString();
 }
 
 function bindEvents() {
-
 	document.querySelector('#remove').addEventListener('click', deleteRecords);
 	document.querySelector('#add').addEventListener('click', addRecord);
-	document.querySelector('#update').addEventListener('click', updateRecord)
-	document.querySelector('#exchange').addEventListener('change', getExchangerate)
+	document.querySelector('#update').addEventListener('click', updateRecord);
+	document.querySelector('#exchange').addEventListener('change', getExchangerate);
 }
 
 function deleteRecords() {
 	/* this function deletes the selected record from itemOperations and prints the table using the function printTable*/
 }
 
-
 function addRecord() {
 	/* this function adds a new record in itemOperations and then calls printRecord(). showTotal(), loadId() and clearAll()*/
+	const item = new Item(
+		document.getElementById('id').innerText,
+		document.getElementById('name').value,
+		document.getElementById('price').value,
+		document.getElementById('desc').value,
+		document.getElementById('color').value,
+		document.getElementById('url').value,
+		false
+	);
+	itemOperations.add(item);
+	printRecord(item);
+	showTotal();
 	clearAll();
+	loadId();
 }
 
 function edit() {
@@ -69,7 +84,6 @@ function createIcon(className, fn, id) {
 
 	return iTag;
 }
-
 
 function updateRecord() {
 	/*this function updates the record that is edited and then prints the table using printTable()*/
