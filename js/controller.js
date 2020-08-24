@@ -65,13 +65,27 @@ function addRecord() {
 	loadId();
 }
 
+const setAddRecordEnabled = shouldEnable => {
+	const addRecordButton = document.getElementById('add');
+	addRecordButton.toggleAttribute('disabled', !shouldEnable);
+};
+
 function edit() {
 	/*this function fills (calls fillFields()) the form with the values of the item to edit after searching it in items */
-
+	const itemId = this.getAttribute('data-itemid');
+	const item = itemOperations.search(itemId);
+	fillFields(item);
+	setAddRecordEnabled(false);
 }
 
 function fillFields(itemObject) {
 	/*this function fills the form with the details of itemObject*/
+	document.getElementById('id').innerText = itemObject.id;
+	document.getElementById('name').value = itemObject.name;
+	document.getElementById('price').value = itemObject.price;
+	document.getElementById('desc').value = itemObject.desc;
+	document.getElementById('color').value = itemObject.color;
+	document.getElementById('url').value = itemObject.url;
 }
 
 function createIcon(className, fn, id) {
@@ -88,7 +102,19 @@ function createIcon(className, fn, id) {
 
 function updateRecord() {
 	/*this function updates the record that is edited and then prints the table using printTable()*/
-
+	const itemId = document.getElementById('id').innerText;
+	const item = itemOperations.search(itemId);
+	// update the items fields
+	item.name = document.getElementById('name').value;
+	item.price = document.getElementById('price').value;
+	item.desc = document.getElementById('desc').value;
+	item.color = document.getElementById('color').value;
+	item.url = document.getElementById('url').value;
+	// clear the form fields and update the records
+	clearAll();
+	loadId();
+	setAddRecordEnabled(true);
+	printTable(itemOperations.items);
 }
 
 function trash() {

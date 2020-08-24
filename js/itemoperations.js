@@ -11,6 +11,7 @@ const itemOperations = {
 	},
 	search(id) {
 		/* searches the item with a given argument id */
+		return this.items.find(item => item.id === id);
 	},
 	markUnMark(id) {
 		/* toggle the isMarked field of the item with the given argument id*/
